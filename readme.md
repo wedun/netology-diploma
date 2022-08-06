@@ -9,4 +9,4 @@
 Создали VPC с подсетями в разных зонах доступности  
 Проверили, что команды 'terraform destroy' и 'terraform apply' выполняются без дополнительных ручных действий  
 Проверили, что применение изменений успешно проходит, используя web-интерфейс Terraform cloud  
-[diploma-workspace-stage.png](diploma-workspace-stage.png)
+![diploma-workspace-stage.png](diploma-workspace-stage.png)
