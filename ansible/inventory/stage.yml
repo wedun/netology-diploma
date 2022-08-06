@@ -1,0 +1,8 @@
+---
+nginx:
+  hosts:
+    nginx-pool:
+      ansible_host: "wedun.ru"
+      ansible_connection: ssh
+      ansible_ssh_user: centos
+

@@ -1,0 +1,12 @@
+---
+# tasks file for revers-proxy-role
+- name: Add epel-release repo
+  become: true
+  ansible.builtin.yum:
+    name: epel-release
+    state: present
+- name: Install nginx
+  become: true
+  ansible.builtin.yum:
+    name: nginx
+    state: latest

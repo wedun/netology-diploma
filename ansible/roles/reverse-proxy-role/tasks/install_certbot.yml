@@ -1,0 +1,34 @@
+---
+# tasks file for revers-proxy-role
+- name: Add epel-release repo
+  become: true
+  ansible.builtin.yum:
+    name: epel-release
+    state: present
+- name: Install snapd
+  become: true
+  ansible.builtin.yum:
+    name: snapd
+    state: latest
+- name: Start snapd
+  ansible.builtin.service:
+    name: snapd
+    state: started
+  notify: Start snapd
+- name: Install snap Core
+  become: true
+  community.general.snap:
+    name: core
+- name: Refresh snap Core
+  become: true
+  ansible.builtin.shell:
+    cmd: snap refresh core
+- name: Create symlink for snap
+  become: true
+  ansible.builtin.shell:
+    cmd: ln -sf /var/lib/snapd/snap /snap
+- name: Install Certbot
+  become: true
+  community.general.snap:
+    name: certbot
+    classic: yes

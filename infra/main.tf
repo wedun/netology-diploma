@@ -22,7 +22,7 @@ provider "yandex" {
 }
 
 resource "yandex_compute_instance" "vm-1" {
-  name = "terraform1"
+  name = "wedunru"
 
   resources {
     cores  = 2
@@ -36,8 +36,9 @@ resource "yandex_compute_instance" "vm-1" {
   }
 
   network_interface {
-    subnet_id = yandex_vpc_subnet.subnet-1.id
-    nat       = true
+    subnet_id	   = yandex_vpc_subnet.subnet-1.id
+    nat            = true
+    nat_ip_address = "51.250.90.86"
   }
 
   metadata = {

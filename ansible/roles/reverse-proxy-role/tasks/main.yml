@@ -1,0 +1,5 @@
+---
+# tasks file for revers-proxy-role
+- include_vars: ../../variables.yml
+- include_tasks: install_nginx.yml
+- include_tasks: install_certbot.yml
