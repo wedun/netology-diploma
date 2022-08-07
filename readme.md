@@ -12,3 +12,7 @@
 ![diploma-workspace-stage.png](diploma-workspace-stage.png)
 
 3. Установка Nginx и LetsEncrypt
+ansible-galaxy init reverse-proxy-role
+
+4. Установка кластера mysql
+ansible-galaxy init database-role

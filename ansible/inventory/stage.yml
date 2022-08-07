@@ -5,4 +5,7 @@ nginx:
       ansible_host: "wedun.ru"
       ansible_connection: ssh
       ansible_ssh_user: centos
-
+    mysql_master_pool:
+      ansible_host: "db01.wedun.ru"
+    mysql_slave_pool:
+      ansible_host: "db02.wedun.ru"

@@ -1,43 +1,42 @@
 ---
-- name: Setup reverse proxy
-  hosts: nginx_pool
+# - name: Setup reverse proxy
+#   hosts: nginx_pool
+#   become: true
+#   vars:
+#     nginx_sites:
+#       - www.wedun.ru
+#       - gitlab.wedun.ru
+#       - grafana.wedun.ru
+#       - prometheus.wedun.ru
+#       - alertmanager.wedun.ru
+#   handlers:
+#     - name: Nginx reload
+#       ansible.builtin.service:
+#         name: nginx
+#         state: restarted
+#   roles:
+#     - reverse-proxy-role
+#   post_tasks:
+#     - name: Apply config for sites
+#       become: true
+#       ansible.builtin.template:
+#         src: "{{ item.src }}"
+#         dest: "{{ item.dest }}"
+#         mode: 0644
+#       with_items:
+#         - { src: 'templates/www.wedun.ru.j2',           dest: '/etc/nginx/conf.d/www.wedun.ru.conf' }
+#         - { src: 'templates/gitlab.wedun.ru.j2',        dest: '/etc/nginx/conf.d/gitlab.wedun.ru.conf' }
+#         - { src: 'templates/grafana.wedun.ru.j2',       dest: '/etc/nginx/conf.d/grafana.wedun.ru.conf' }
+#         - { src: 'templates/prometheus.wedun.ru.j2',    dest: '/etc/nginx/conf.d/prometheus.wedun.ru.conf' }
+#         - { src: 'templates/alertmanager.wedun.ru.j2',  dest: '/etc/nginx/conf.d/alertmanager.wedun.ru.conf' }
+#       notify: Nginx reload
+#     - name: Request test certs for sites
+#       become: true
+#       ansible.builtin.command: /var/lib/snapd/snap/bin/certbot -d {{ item }} -m wedun123@yandex.ru --nginx --agree-tos --test-cert
+#       with_items: "{{ nginx_sites }}"
+- name: Setup mysql
+  hosts: mysql_master_pool
   become: true
-  vars:
-    nginx_sites:
-      - www.wedun.ru
-      - gitlab.wedun.ru
-      - grafana.wedun.ru
-      - prometheus.wedun.ru
-      - alertmanager.wedun.ru
-  handlers:
-    - name: Nginx reload
-      ansible.builtin.service:
-        name: nginx
-        state: restarted
+  remote_user: centos
   roles:
-    - reverse-proxy-role
-  post_tasks:
-          #    - name: Apply config for Nginx
-          #      become: true
-          #      ansible.builtin.template:
-          #        src: nginx.conf.j2
-          #        dest: /etc/nginx/nginx.conf
-          #        mode: 0644
-          #      notify: Nginx reload
-    - name: Apply config for sites
-      become: true
-      ansible.builtin.template:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-        mode: 0644
-      with_items:
-        - { src: 'templates/www.wedun.ru.j2',           dest: '/etc/nginx/conf.d/www.wedun.ru.conf' }
-        - { src: 'templates/gitlab.wedun.ru.j2',        dest: '/etc/nginx/conf.d/gitlab.wedun.ru.conf' }
-        - { src: 'templates/grafana.wedun.ru.j2',       dest: '/etc/nginx/conf.d/grafana.wedun.ru.conf' }
-        - { src: 'templates/prometheus.wedun.ru.j2',    dest: '/etc/nginx/conf.d/prometheus.wedun.ru.conf' }
-        - { src: 'templates/alertmanager.wedun.ru.j2',  dest: '/etc/nginx/conf.d/alertmanager.wedun.ru.conf' }
-      notify: Nginx reload
-    - name: Request test certs for sites
-      become: true
-      ansible.builtin.command: /var/lib/snapd/snap/bin/certbot -d {{ item }} -m wedun123@yandex.ru --nginx --agree-tos --test-cert
-      with_items: "{{ nginx_sites }}"
+    - database-role

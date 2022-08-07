@@ -1,32 +1,11 @@
-terraform {
-  backend "remote" {
-    organization = "laykomdn"
-
-    workspaces {
-      name = "diploma-workspace-stage"
-    }
-  }
-
-  required_providers {
-    yandex = {
-      source = "yandex-cloud/yandex"
-    }
-  }
-  required_version = ">= 0.13"
-}
-
-provider "yandex" {
-  cloud_id  = "b1gfmggr757ala32rq97"
-  folder_id = "b1g79ptugpleeoj44c6k"
-  zone      = "ru-central1-a"
-}
-
 resource "yandex_compute_instance" "vm-1" {
-  name = "wedunru"
+  name      = "wedunru"
+  hostname  = "www.wedun.ru"
 
   resources {
-    cores  = 2
-    memory = 2
+    cores         = 2
+    core_fraction = 20
+    memory        = 2
   }
 
   boot_disk {
@@ -36,9 +15,9 @@ resource "yandex_compute_instance" "vm-1" {
   }
 
   network_interface {
-    subnet_id	   = yandex_vpc_subnet.subnet-1.id
-    nat            = true
-    nat_ip_address = "51.250.90.86"
+    subnet_id       = yandex_vpc_subnet.subnet-1.id
+    nat             = true
+    nat_ip_address  = "51.250.90.86"
   }
 
   metadata = {
@@ -46,28 +25,30 @@ resource "yandex_compute_instance" "vm-1" {
   }
 }
 
-resource "yandex_vpc_network" "network-1" {
-  name = "network1"
-}
+resource "yandex_compute_instance" "vm-nat-1" {
+  name     = "natwedunru"
+  hostname = "nat.wedun.ru"
+  zone     = "ru-central1-a"
 
-resource "yandex_vpc_subnet" "subnet-1" {
-  name           = "subnet1"
-  zone           = "ru-central1-a"
-  network_id     = yandex_vpc_network.network-1.id
-  v4_cidr_blocks = ["192.168.10.0/24"]
-}
+  resources {
+    cores         = 2
+    core_fraction = 20
+    memory        = 2
+  }
 
-resource "yandex_vpc_subnet" "subnet-2" {
-  name		 = "subnet2"
-  zone 		 = "ru-central1-b"
-  network_id	 = yandex_vpc_network.network-1.id
-  v4_cidr_blocks = ["192.168.20.0/24"]
-}
+  boot_disk {
+    initialize_params {
+      image_id = "fd84mnpg35f7s7b0f5lg"
+    }
+  }
 
-output "internal_ip_address_vm_1" {
-  value = yandex_compute_instance.vm-1.network_interface.0.ip_address
-}
+  network_interface {
+    subnet_id       = yandex_vpc_subnet.subnet-1.id
+    nat             = true
+    nat_ip_address  = "51.250.75.217"
+  }
 
-output "external_ip_address_vm_1" {
-  value = yandex_compute_instance.vm-1.network_interface.0.nat_ip_address
+  metadata = {
+    ssh-keys = "centos:${file("./id_rsa.pub")}"
+  }
 }
