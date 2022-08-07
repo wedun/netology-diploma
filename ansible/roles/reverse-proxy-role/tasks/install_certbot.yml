@@ -14,7 +14,7 @@
   ansible.builtin.service:
     name: snapd
     state: started
-  notify: Start snapd
+    #  notify: Start snapd
 - name: Install snap Core
   become: true
   community.general.snap:
