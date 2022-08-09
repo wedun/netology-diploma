@@ -24,13 +24,13 @@ output "ssh_config" {
     HostName ${yandex_compute_instance.vm-db-1.network_interface.0.ip_address}
     User centos
     IdentityFile ~/.ssh/id_rsa
-      ProxyJump centos@${yandex_compute_instance.vm-nat-1.network_interface.0.nat_ip_address}
+      ProxyJump ubuntu@${yandex_compute_instance.vm-nat-1.network_interface.0.nat_ip_address}
       ProxyCommand ssh -W %h:%p -i .ssh/id_rsa
   Host db02.wedun.ru
     HostName ${yandex_compute_instance.vm-db-2.network_interface.0.ip_address}
     User centos
     IdentityFile ~/.ssh/id_rsa
-      ProxyJump centos@${yandex_compute_instance.vm-nat-1.network_interface.0.nat_ip_address}
+      ProxyJump ubuntu@${yandex_compute_instance.vm-nat-1.network_interface.0.nat_ip_address}
       ProxyCommand ssh -W %h:%p -i .ssh/id_rsa
   Host app.wedun.ru
     HostName ${yandex_compute_instance.vm-app-1.network_interface.0.ip_address}

@@ -1,0 +1,33 @@
+- name: Setup master node config bind-address
+  ansible.builtin.lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+    line: bind-address = 0.0.0.0
+- name: Setup master node config server-id
+  ansible.builtin.lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^#server-id'
+    line: server-id = 1
+- name: Setup master node config log files
+  ansible.builtin.blockinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    block: |
+      log_bin = /var/log/mysql/mysql-bin.log
+      log_bin_index = /var/log/mysql/mysql-bin.log.index
+      relay_log = /var/log/mysql/mysql-relay-bin
+      relay_log_index = /var/log/mysql/mysql-relay-bin.index
+- name: Restart node
+  ansible.builtin.systemd:
+    name: mysql
+    state: restarted
+    enabled: yes
+- name: Create replica user
+  ansible.builtin.command: sudo mysql -u root -e "CREATE USER IF NOT EXISTS 'replicator'@'{{ db02_wedun_ru_ip_addr_internal }}' IDENTIFIED BY 'Pa$$w0rd';"
+  ignore_errors: yes
+- name: Grant replication permission to replica user query
+  ansible.builtin.command: sudo mysql -u root -e "GRANT REPLICATION SLAVE ON *.* TO 'replicator'@'{{ db02_maliushkin_ru_ip_addr_internal }}';"
+  ignore_errors: yes
+- name: Set master status position to `mysql_master_position` variable
+  ansible.builtin.shell:
+    cmd: sudo mysql -u root -e "SHOW MASTER STATUS\G" | grep "Position" | cut -d ":" -f2 | xargs
+  register: mysql_master_position

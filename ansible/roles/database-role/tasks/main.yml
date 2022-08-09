@@ -1,0 +1,5 @@
+---
+# tasks file for database-role
+- include_vars: ../../variables.yml
+- include_tasks: install_mysql.yml
+- include_tasks: setup_mysql_master.yml

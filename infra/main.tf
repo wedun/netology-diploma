@@ -46,9 +46,10 @@ resource "yandex_compute_instance" "vm-nat-1" {
     subnet_id       = yandex_vpc_subnet.subnet-1.id
     nat             = true
     nat_ip_address  = "51.250.75.217"
+    ip_address 	    = "192.168.10.10"
   }
 
   metadata = {
-    ssh-keys = "centos:${file("./id_rsa.pub")}"
+    ssh-keys = "ubuntu:${file("./id_rsa.pub")}"
   }
 }

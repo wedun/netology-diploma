@@ -1,0 +1,29 @@
+- name: Setup master node config bind-address
+  ansible.builtin.lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+    line: bind-address = 0.0.0.0
+- name: Setup master node config server-id
+  ansible.builtin.lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^#server-id'
+    line: server-id = 2
+- name: Setup master node config log files
+  ansible.builtin.blockinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    block: |
+      log_bin = /var/log/mysql/mysql-bin.log
+      log_bin_index = /var/log/mysql/mysql-bin.log.index
+      relay_log = /var/log/mysql/mysql-relay-bin
+      relay_log_index = /var/log/mysql/mysql-relay-bin.index
+- name: Restart node
+  ansible.builtin.systemd:
+    name: mysql
+    state: restarted
+    enabled: yes
+- name: Stop Slave
+  ansible.builtin.command: sudo mysql -u root -e "STOP SLAVE;"
+- name: Master to Master
+  ansible.builtin.command: sudo mysql -u root -e "CHANGE MASTER TO MASTER_HOST ='{{ db01_wedun_ru_ip_addr_internal }}', MASTER_USER ='replicator', MASTER_PASSWORD ='Pa$$w0rd', MASTER_LOG_FILE = 'mysql-bin.000002', MASTER_LOG_POS = {{ mysql_master_position }};"
+- name: Start Slave
+  ansible.builtin.command: mysql -u root -e "START SLAVE;"

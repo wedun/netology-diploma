@@ -1,0 +1,13 @@
+- name: Update repos
+  become: true
+  ansible.builtin.apt:
+    upgrade: no
+    update_cache: yes
+- name: Install mysql
+  become: true
+  ansible.builtin.apt:
+    name: 
+      - mysql-server
+      - mysql-client
+    state: present
+    update_cache: true

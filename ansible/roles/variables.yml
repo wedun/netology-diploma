@@ -1,6 +1,6 @@
 app_wedun_ru_ip_addr_internal: "127.0.0.1"
-db01_wedun_ru_ip_addr_internal: "127.0.0.1"
-db02_wedun_ru_ip_addr_internal: "127.0.0.1"
+db01_wedun_ru_ip_addr_internal: "192.168.10.41"
+db02_wedun_ru_ip_addr_internal: "192.168.10.42"
 entrance_wedun_ru_ip_addr_external: "127.0.0.1"
 gitlab_wedun_ru_ip_addr_internal: "127.0.0.1"
 monitoring_wedun_ru_ip_addr_internal: "127.0.0.1"
