@@ -10,7 +10,8 @@ resource "yandex_compute_instance" "vm-1" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd88d14a6790do254kj7"
+      image_id = "fd81d2d9ifd50gmvc03g"
+      size     = 10
     }
   }
 
@@ -38,7 +39,7 @@ resource "yandex_compute_instance" "vm-nat-1" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd84mnpg35f7s7b0f5lg"
+      image_id = "fd8josjq21d56924jfan"
     }
   }
 

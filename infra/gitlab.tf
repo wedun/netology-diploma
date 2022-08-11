@@ -3,20 +3,21 @@ resource "yandex_compute_instance" "vm-gitlab-1" {
   hostname  = "gitlab.wedun.ru"
 
   resources {
-    cores  = 2
+    cores  = 4
     core_fraction = 20
-    memory = 2
+    memory = 8
   }
 
   boot_disk {
     initialize_params {
-      image_id = "fd88d14a6790do254kj7"
+      image_id = "fd81d2d9ifd50gmvc03g"
       size     = 30
     }
   }
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
+    ip_address      = "192.168.10.26"
   }
 
   metadata = {
@@ -31,18 +32,19 @@ resource "yandex_compute_instance" "vm-gitlab-runner-1" {
   resources {
     cores           = 2
     core_fraction   = 20
-    memory          = 2
+    memory          = 4
   }
 
   boot_disk {
     initialize_params {
-      image_id = "fd88d14a6790do254kj7"
+      image_id = "fd81d2d9ifd50gmvc03g"
       size     = 30
     }
   }
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
+    ip_address      = "192.168.10.27"
   }
 
   metadata = {

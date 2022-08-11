@@ -1,12 +1,21 @@
 ---
 # tasks file for revers-proxy-role
-- name: Add epel-release repo
+- name: Update packages
   become: true
-  ansible.builtin.yum:
-    name: epel-release
-    state: present
+  ansible.builtin.apt:
+    upgrade: no
+    update_cache: yes
 - name: Install nginx
   become: true
-  ansible.builtin.yum:
+  ansible.builtin.apt:
     name: nginx
     state: latest
+    update_cache: true
+- name: Allow ufw Nginx 
+  ansible.builtin.command: ufw allow 'Nginx Full'
+- name: Allow ufw OpenSSH
+  ansible.builtin.command: ufw allow 'OpenSSH'
+- name: Allow everything and enable UFW
+  community.general.ufw:
+    state: enabled
+    policy: allow

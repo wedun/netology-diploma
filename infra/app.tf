@@ -10,13 +10,14 @@ resource "yandex_compute_instance" "vm-app-1" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd88d14a6790do254kj7"
-      size     = 10
+      image_id   = "fd81d2d9ifd50gmvc03g"
+      size       = 10
     }
   }
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
+    ip_address      = "192.168.10.15"
   }
 
   metadata = {

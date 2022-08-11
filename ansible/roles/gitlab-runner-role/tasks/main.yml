@@ -1,0 +1,17 @@
+---
+# tasks file for gitlab-runner-role
+- name: Update apt packages
+  ansible.builtin.apt:
+    upgrade: no
+    update_cache: yes
+
+- name: Include Docker task from `common` role
+  include_role:
+    name: common-role
+    tasks_from: setup_docker
+
+- name: Download gitlab-runner
+  ansible.builtin.command: curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
+
+- name: Install apt gitlab-runner
+  ansible.builtin.command: apt-get install gitlab-runner

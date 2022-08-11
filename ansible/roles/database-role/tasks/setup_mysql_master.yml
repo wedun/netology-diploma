@@ -25,7 +25,7 @@
   ansible.builtin.command: sudo mysql -u root -e "CREATE USER IF NOT EXISTS 'replicator'@'{{ db02_wedun_ru_ip_addr_internal }}' IDENTIFIED BY 'Pa$$w0rd';"
   ignore_errors: yes
 - name: Grant replication permission to replica user query
-  ansible.builtin.command: sudo mysql -u root -e "GRANT REPLICATION SLAVE ON *.* TO 'replicator'@'{{ db02_maliushkin_ru_ip_addr_internal }}';"
+  ansible.builtin.command: sudo mysql -u root -e "GRANT REPLICATION SLAVE ON *.* TO 'replicator'@'{{ db02_wedun_ru_ip_addr_internal }}';"
   ignore_errors: yes
 - name: Set master status position to `mysql_master_position` variable
   ansible.builtin.shell:

@@ -4,12 +4,28 @@ nginx:
     nginx_pool:
       ansible_host: "wedun.ru"
       ansible_connection: ssh
-      ansible_ssh_user: centos
+      ansible_ssh_user: ubuntu
     mysql_master_pool:
       ansible_host: "db01.wedun.ru"
       ansible_connection: ssh
       ansible_ssh_user: ubuntu
     mysql_slave_pool:
       ansible_host: "db02.wedun.ru"
+      ansible_connection: ssh
+      ansible_ssh_user: ubuntu
+    wordpress_pool:
+      ansible_host: "app.wedun.ru"
+      ansible_connection: ssh
+      ansible_ssh_user: ubuntu
+    gitlab_pool:
+      ansible_host: "gitlab.wedun.ru"
+      ansible_connection: ssh
+      ansible_ssh_user: ubuntu
+    gitlab_runner_pool:
+      ansible_host: "runner.wedun.ru"
+      ansible_connection: ssh
+      ansible_ssh_user: ubuntu
+    monitoring_pool:
+      ansible_host: "monitoring.wedun.ru"
       ansible_connection: ssh
       ansible_ssh_user: ubuntu

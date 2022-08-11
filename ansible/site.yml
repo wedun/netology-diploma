@@ -1,39 +1,43 @@
 ---
-# - name: Setup reverse proxy
-#   hosts: nginx_pool
-#   become: true
-#   vars:
-#     nginx_sites:
-#       - www.wedun.ru
-#       - gitlab.wedun.ru
-#       - grafana.wedun.ru
-#       - prometheus.wedun.ru
-#       - alertmanager.wedun.ru
-#   handlers:
-#     - name: Nginx reload
-#       ansible.builtin.service:
-#         name: nginx
-#         state: restarted
-#   roles:
-#     - reverse-proxy-role
-#   post_tasks:
-#     - name: Apply config for sites
-#       become: true
-#       ansible.builtin.template:
-#         src: "{{ item.src }}"
-#         dest: "{{ item.dest }}"
-#         mode: 0644
-#       with_items:
-#         - { src: 'templates/www.wedun.ru.j2',           dest: '/etc/nginx/conf.d/www.wedun.ru.conf' }
-#         - { src: 'templates/gitlab.wedun.ru.j2',        dest: '/etc/nginx/conf.d/gitlab.wedun.ru.conf' }
-#         - { src: 'templates/grafana.wedun.ru.j2',       dest: '/etc/nginx/conf.d/grafana.wedun.ru.conf' }
-#         - { src: 'templates/prometheus.wedun.ru.j2',    dest: '/etc/nginx/conf.d/prometheus.wedun.ru.conf' }
-#         - { src: 'templates/alertmanager.wedun.ru.j2',  dest: '/etc/nginx/conf.d/alertmanager.wedun.ru.conf' }
-#       notify: Nginx reload
-#     - name: Request test certs for sites
-#       become: true
-#       ansible.builtin.command: /var/lib/snapd/snap/bin/certbot -d {{ item }} -m wedun123@yandex.ru --nginx --agree-tos --test-cert
-#       with_items: "{{ nginx_sites }}"
+- name: Setup reverse proxy
+  hosts: nginx_pool
+  become: true
+  vars:
+    nginx_sites:
+      - www.wedun.ru
+      - gitlab.wedun.ru
+      - grafana.wedun.ru
+      - prometheus.wedun.ru
+      - alertmanager.wedun.ru
+  handlers:
+    - name: Nginx reload
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+        enabled: yes
+  roles:
+    - reverse-proxy-role
+  post_tasks:
+    - name: Apply nginx config
+      become: true
+      ansible.builtin.command: truncate --size 0 /etc/nginx/sites-enabled/default
+    - name: Apply config for sites
+      become: true
+      ansible.builtin.template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        mode: 0644
+      with_items:
+        - { src: 'templates/www.wedun.ru.j2',           dest: '/etc/nginx/sites-enabled/www.wedun.ru.conf' }
+        - { src: 'templates/gitlab.wedun.ru.j2',        dest: '/etc/nginx/sites-enabled/gitlab.wedun.ru.conf' }
+        - { src: 'templates/grafana.wedun.ru.j2',       dest: '/etc/nginx/sites-enabled/grafana.wedun.ru.conf' }
+        - { src: 'templates/prometheus.wedun.ru.j2',    dest: '/etc/nginx/sites-enabled/prometheus.wedun.ru.conf' }
+        - { src: 'templates/alertmanager.wedun.ru.j2',  dest: '/etc/nginx/sites-enabled/alertmanager.wedun.ru.conf' }
+      notify: Nginx reload
+    - name: Request test certs for sites
+      become: true
+      ansible.builtin.command: certbot -d {{ item }} -m wedun123@yandex.ru --nginx --agree-tos --test-cert --force-renewal
+      with_items: "{{ nginx_sites }}"
 - name: Setup mysql
   hosts: mysql_master_pool
   become: true
@@ -47,11 +51,35 @@
       register: mysql_master_position
     - name: Echo mysql_master_position
       ansible.builtin.command: echo {{ mysql_master_position }}
-- name: Setup mysql slave
-  hosts: mysql_slave_pool
+#- name: Setup mysql slave
+#  hosts: mysql_slave_pool
+#  become: true
+#  remote_user: ubuntu
+#  roles:
+#    - database-slave-role
+#  vars:
+#    - mysql_master_position: "{{ hostvars['db01.wedun.ru']['mysql_master_position'] }}"
+- name: Setup wordpress
+  hosts: wordpress_pool
   become: true
   remote_user: ubuntu
   roles:
-    - database-slave-role
-  vars:
-    - mysql_master_position: "{{ hostvars['db01.wedun.ru']['mysql_master_position'] }}"
+    - wordpress-role
+- name: Setup gitlab
+  hosts: gitlab_pool
+  become: true
+  remote_user: ubuntu
+  roles:
+    - gitlab-role
+- name: Setup gitlab runner
+  hosts: gitlab_runner_pool
+  become: true
+  remote_user: ubuntu
+  roles:
+    - gitlab-runner-role
+- name: Setup monitoring
+  hosts: monitoring_pool
+  become: true
+  remote_user: ubuntu
+  roles:
+    - monitoring-role

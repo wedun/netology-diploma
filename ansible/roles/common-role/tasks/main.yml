@@ -1,0 +1,4 @@
+---
+# tasks file for common-role
+- include_tasks: setup_docker.yml
+- include_tasks: setup_node_exporter.yml

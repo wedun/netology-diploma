@@ -1,0 +1,17 @@
+---
+# tasks file for gitlab-role
+- name: Update apt packages
+  ansible.builtin.apt:
+    upgrade: no
+    update_cache: yes
+
+- name: Include Docker task from `common` role
+  include_role:
+    name: common-role
+    tasks_from: setup_docker
+
+- name: Wget gitlab/master/docker-compose.yml
+  ansible.builtin.command: wget https://raw.githubusercontent.com/sameersbn/docker-gitlab/master/docker-compose.yml -P /opt/stack/gitlab
+
+- name: Up all services in compose
+  ansible.builtin.command: docker-compose -f /opt/stack/gitlab/docker-compose.yml up -d

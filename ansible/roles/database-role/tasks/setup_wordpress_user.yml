@@ -1,0 +1,10 @@
+- name: Setup wordpress user
+  become: true
+  ansible.builtin.command: sudo mysql -u root -e "CREATE USER IF NOT EXISTS 'wordpress'@'%' IDENTIFIED BY 'wordpress';"
+- name: Setup wordpress database
+  become: true
+  ansible.builtin.command: sudo mysql -u root -e "CREATE DATABASE IF NOT EXISTS wordpress;"
+- name: Setup wordpress database permissions
+  become: true
+  ansible.builtin.command: sudo mysql -u root -e "GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'%'"
+

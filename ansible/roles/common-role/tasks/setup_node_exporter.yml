@@ -1,0 +1,11 @@
+- name: Synchronization
+  become: true
+  ansible.builtin.copy:
+    src: files/
+    dest: "/opt/stack/"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Up all services in compose
+  ansible.builtin.command: docker-compose -f /opt/stack/docker-compose.yml up -d

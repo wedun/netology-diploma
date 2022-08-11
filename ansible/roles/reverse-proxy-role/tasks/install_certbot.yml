@@ -1,13 +1,8 @@
 ---
 # tasks file for revers-proxy-role
-- name: Add epel-release repo
-  become: true
-  ansible.builtin.yum:
-    name: epel-release
-    state: present
 - name: Install snapd
   become: true
-  ansible.builtin.yum:
+  ansible.builtin.apt:
     name: snapd
     state: latest
 - name: Start snapd
