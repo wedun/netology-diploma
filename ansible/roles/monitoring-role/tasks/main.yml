@@ -7,13 +7,13 @@
 
 - name: Include Docker task from `common` role
   include_role:
-    name: common
-    tasks_from: docker
+    name: common-role
+    tasks_from: setup_docker
 
 - name: Include Node exporter task from `common` role
   include_role:
-    name: common
-    tasks_from: node-exporter
+    name: common-role
+    tasks_from: setup_node_exporter
 
 - name: Synchronization
   ansible.builtin.copy:

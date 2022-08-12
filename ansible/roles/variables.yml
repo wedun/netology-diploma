@@ -1,7 +1,7 @@
 app_wedun_ru_ip_addr_internal: "192.168.10.15"
 db01_wedun_ru_ip_addr_internal: "192.168.10.41"
 db02_wedun_ru_ip_addr_internal: "192.168.10.42"
-# entrance_wedun_ru_ip_addr_external: "127.0.0.1"
 gitlab_wedun_ru_ip_addr_internal: "192.168.10.26"
 monitoring_wedun_ru_ip_addr_internal: "192.168.10.20"
 runner_wedun_ru_ip_addr_internal: "192.168.10.27"
+mysql_master_position: ""

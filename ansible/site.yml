@@ -49,16 +49,14 @@
       ansible.builtin.shell:
         cmd: sudo mysql -u root -e "SHOW MASTER STATUS\G" | grep "Position" | cut -d ":" -f2 | xargs
       register: mysql_master_position
-    - name: Echo mysql_master_position
-      ansible.builtin.command: echo {{ mysql_master_position }}
-#- name: Setup mysql slave
-#  hosts: mysql_slave_pool
-#  become: true
-#  remote_user: ubuntu
-#  roles:
-#    - database-slave-role
-#  vars:
-#    - mysql_master_position: "{{ hostvars['db01.wedun.ru']['mysql_master_position'] }}"
+- name: Setup mysql slave
+  hosts: mysql_slave_pool
+  become: true
+  remote_user: ubuntu
+  roles:
+    - database-slave-role
+  vars:
+    - mysql_master_position: "{{ hostvars['db01.wedun.ru']['mysql_master_position'] }}"
 - name: Setup wordpress
   hosts: wordpress_pool
   become: true

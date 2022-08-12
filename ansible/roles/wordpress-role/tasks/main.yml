@@ -51,11 +51,6 @@
           Options FollowSymLinks
           Require all granted
         </Directory>
-        <IfModule mod_rewrite.c>
-          RewriteEngine On
-          RewriteCond %{HTTPS} off
-          RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-        </IfModule>
       </VirtualHost>
 - name: a2ensite wordpress
   ansible.builtin.command: a2ensite wordpress
@@ -87,15 +82,15 @@
 - name: Update WordPress password
   ansible.builtin.command: sudo -u www-data sed -i 's/password_here/wordpress/' /var/www/wordpress/wp-config.php
 
-- name: Add `WP_SITEURL` to Wordpress config
-  ansible.builtin.lineinfile:
-    path: /var/www/wordpress/wp-config.php
-    line: define( 'WP_HOME', 'https://www.wedun.ru' );
+#- name: Add `WP_SITEURL` to Wordpress config
+#  ansible.builtin.lineinfile:
+#    path: /var/www/wordpress/wp-config.php
+#    line: define( 'WP_HOME', 'https://www.wedun.ru' );
 
-- name: Add `WP_SITEURL` to Wordpress config
-  ansible.builtin.lineinfile:
-    path: /var/www/wordpress/wp-config.php
-    line: define( 'WP_SITEURL', 'https://www.wedun.ru' );
+#- name: Add `WP_SITEURL` to Wordpress config
+#  ansible.builtin.lineinfile:
+#    path: /var/www/wordpress/wp-config.php
+#    line: define( 'WP_SITEURL', 'https://www.wedun.ru' );
 
 - name: Include Docker task from `common` role
   include_role:
