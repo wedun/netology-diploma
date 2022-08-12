@@ -131,8 +131,10 @@ PLAY RECAP *********************************************************************
 wordpress_pool             : ok=27   changed=24   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-Результат
+Результат:
+Установка wordpress  
 ![wordpress-1.png](wordpress-1.png)
+Результат установки  
 ![wordpress-2.png](wordpress-2.png)
 
 Gitlab и gitlab-runner role:
@@ -164,8 +166,10 @@ deploy-job:
 
 ```
 
-Результат
+Результат:
+Опубликовали репозиторий  
 ![gitlab.png](gitlab.png)
+Подключили Runner  
 ![gitlab-runner.png](gitlab-runner.png)
 
 Monitoring
@@ -174,7 +178,10 @@ PLAY RECAP *********************************************************************
 monitoring_pool            : ok=14   changed=11   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-Проверим установленные роли
+Проверим установленные роли:
+Настроили Prometheus  
 ![prometheus.png](prometheus.png)
+Настроили Grafana  
 ![grafana.png](grafana.png)
+Настроили Alertmanager  
 ![alertmanager.png](alertmanager.png)
